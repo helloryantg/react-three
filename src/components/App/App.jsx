@@ -110,10 +110,12 @@ export default class App extends Component {
         let createGeometry = () => {
             let geometry = new THREE.SphereGeometry(5, 30, 30)
 
-            let material = new THREE.MeshBasicMaterial({
-                color: 0xbbbbbb,
-                wireframe: true
-            })
+            // let material = new THREE.MeshBasicMaterial({
+            //     color: 0xbbbbbb,
+            //     // wireframe: true
+            // })
+
+            let material = new THREE.MeshNormalMaterial()
 
             sphere = new THREE.Mesh(geometry, material)
 
