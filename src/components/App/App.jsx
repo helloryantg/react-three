@@ -9,9 +9,13 @@ const AppWrapper = styled.div`
 
 export default class App extends Component {
 
+    /**
+     ******************************* COMPONENTDIDMOUNT *******************************
+     */
     componentDidMount() {
         // this.renderCubes()
-        this.renderSphere()
+        // this.renderSphere()
+        this.renderLines()
     }
 
     firstObject = () => {
@@ -144,6 +148,68 @@ export default class App extends Component {
         let mainLoop = () => {
             sphere.rotation.y += ADD
             normals.update()
+
+            renderer.render(scene, camera)
+            requestAnimationFrame(mainLoop)
+        }
+
+        init()
+        mainLoop()
+    }
+
+    renderLines() {
+        let scene, camera, renderer, cylinder, sphere
+        let ADD = 0.02
+
+        const createGeometry = () => {
+            let material = new THREE.LineBasicMaterial({ 
+                color: 0xffffff,
+                linewidth: 1 
+            })
+
+            let geometry = new THREE.CylinderGeometry(3, 2, 4)
+
+            cylinder = new THREE.Line(geometry, material)
+            cylinder.position.z = -10
+            cylinder.position.x = -5
+
+            geometry = new THREE.SphereGeometry(3, 30, 30)
+            sphere = new THREE.Line(geometry, material)
+
+            sphere.position.z = 0
+            sphere.position.x = 5
+
+            scene.add(cylinder)
+            scene.add(sphere)
+        }
+
+        const init = () => {
+            scene = new THREE.Scene()
+            scene.background = new THREE.Color(0xffffff)
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)            
+            camera.position.z = 20
+
+            const light = new THREE.AmbientLight(0xffffff, 0.5)
+            scene.add(light)
+
+            const light2 = new THREE.PointLight(0xffffff, 0.5)
+            scene.add(light2)
+
+            createGeometry()
+
+            renderer = new THREE.WebGLRenderer()
+            renderer.setSize(window.innerWidth, window.innerHeight)
+
+            document.body.appendChild(renderer.domElement)
+        }
+
+        const mainLoop = () => {
+            cylinder.rotation.x += ADD
+            sphere.rotation.x += ADD
+            
+            cylinder.rotation.y += ADD
+            sphere.rotation.y += ADD
 
             renderer.render(scene, camera)
             requestAnimationFrame(mainLoop)
